@@ -2,7 +2,7 @@
 
 var reportResultsApp = angular.module("reportResultsApp", ['angularFileUpload', 'ui.bootstrap']);
 
-reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", function ($scope, $modal) {
+reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$tooltip", "$compile", function($scope, $modal, $tooltip, $compile) {
     $scope.results = null;
     $scope.filename = null;
 
@@ -31,6 +31,28 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", function (
             }
         });
     };
+
+    // Tooltip for a test
+    $scope.tooltip = function(hostname, result, $event) {
+        // The idea is to build the tooltip late. So, we check if we
+        // already have a tooltip and if not, we add it, compile it
+        // and replace the element.
+        var element = angular.element($event.toElement);
+        if (element.attr("tooltip") == result.test.full_description)
+            return;
+
+        element.attr("tooltip", result.test.full_description);
+        var recompiled = $compile(element);
+        var linked = recompiled($scope);
+
+        // Replace and replay the event we got
+        element.replaceWith(linked);
+        setTimeout(function() {
+            linked.triggerHandler($event.type);
+        }, 0);
+    };
+
+
 }]);
 
 reportResultsApp.controller(

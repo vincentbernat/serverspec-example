@@ -63,8 +63,7 @@
         <td ng-repeat="r in result.results"
             class="test status-{{ r.test.status }}">
           <span ng-click="details(result.name, r)"
-                tooltip="{{ r.test.full_description }}"
-                tooltip-append-to-body="true"></span>
+                ng-mouseenter="tooltip(result.name, r, $event)"></span>
         </td>
       </tr>
     </table>
