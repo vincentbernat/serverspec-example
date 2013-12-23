@@ -62,11 +62,14 @@
         </td>
         <td ng-repeat="r in result.results"
             class="test status-{{ r.test.status }}">
-          <span ng-click="details(result.name, r)"></span>
+          <span ng-click="details(result.name, r)"
+                tooltip="{{ r.test.full_description }}"
+                tooltip-append-to-body="true"></span>
         </td>
       </tr>
     </table>
 
+    <!-- Template for modal dialog with test details -->
     <script type="text/ng-template" id="details.html">
         <div class="modal-header">
             <h3>{{ hostname }}</h3>
