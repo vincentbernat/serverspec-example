@@ -137,7 +137,9 @@ namespace :reports do
   end
 end
 
-check_tasks = Rake.application.top_level_tasks.select { |task| task.start_with?("check:") }
+check_tasks = Rake.application.top_level_tasks.select { |task|
+  task.start_with?("check:") or task == "spec"
+}
 if not check_tasks.empty? then
   # Before starting, cleanup reports
   Rake::Task[check_tasks.first].enhance [ "reports:clean" ]
