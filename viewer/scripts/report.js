@@ -2,7 +2,7 @@
 
 var reportResultsApp = angular.module("reportResultsApp", ['angularFileUpload', 'ui.bootstrap']);
 
-reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$tooltip", "$compile", function($scope, $modal, $tooltip, $compile) {
+reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$tooltip", function($scope, $modal, $tooltip) {
     $scope.results = null;
     $scope.filename = null;
 
@@ -32,28 +32,40 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$tooltip"
         });
     };
 
-    // Tooltip for a test
-    $scope.tooltip = function(hostname, result, $event) {
-        // The idea is to build the tooltip late. So, we check if we
-        // already have a tooltip and if not, we add it, compile it
-        // and insert into the current element
-        var element = angular.element($event.toElement);
-        if (element.attr("tooltip") ||
-            element.children().length) return;
-
-        console.log(element, $event);
-        var inside = angular.element("<span>")
-            .attr("tooltip", result.test.full_description);
-        console.log(inside);
-        var compiled = $compile(inside);
-        var linked = compiled($scope);
-
-        // Put the element inside the current one
-        element.append(linked);
-    };
-
-
 }]);
+
+reportResultsApp.directive(
+    "rrTooltip", [ "$compile", function($compile) {
+        var i = 0;
+        return {
+            restrict: 'A',
+            scope: {
+                content: '@rrTooltip'
+            },
+            compile: function($element, attr) {
+                return function(scope, element, attr) {
+                    element.on("mouseenter", function(event) {
+                        // Only now, we will build the new element
+                        // with the tooltip if it doesn't exist (or
+                        // doesn't match the tooltip)
+                        var inside = element.children();
+                        if (!inside.length) {
+                            inside = angular.element("<span>");
+                        }
+                        if (inside.attr("tooltip") === scope.content) return;
+                        inside.attr("tooltip", scope.content);
+
+                        // And insert it
+                        var compiled = $compile(inside);
+                        var linked = compiled(scope);
+                        element.empty();
+                        element.append(linked);
+                    });
+                }
+            }
+        }
+    }
+]);
 
 reportResultsApp.controller(
     "resultDetailsCtrl",
