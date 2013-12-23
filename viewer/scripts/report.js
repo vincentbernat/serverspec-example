@@ -36,7 +36,6 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$tooltip"
 
 reportResultsApp.directive(
     "rrTooltip", [ "$compile", function($compile) {
-        var i = 0;
         return {
             restrict: 'A',
             scope: {
