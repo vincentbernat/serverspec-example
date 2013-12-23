@@ -1,0 +1,96 @@
+<!doctype html>
+<html ng-app="reportResultsApp">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Test results</title>
+
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/report.css">
+
+    <script src="scripts/underscore-min.js"></script>
+    <script src="scripts/angular.min.js"></script>
+    <script src="scripts/angular-file-upload.min.js"></script>
+    <script src="scripts/ui-bootstrap-tpls-0.7.0.min.js"></script>
+
+    <script src="scripts/report.js"></script>
+
+  </head>
+  <body ng-controller="reportResultCtrl">
+
+    <!-- When we don't have any results, display file uploader -->
+    <div ng-show="!results" class="container">
+      <form role="form">
+          <div class="dropzone"
+               ng-file-drop="onFileSelect($files)"
+               ng-show="dropSupported"
+               ng-file-drop-available="dropSupported=true">
+            <input type="file"
+                   placeholder="JSON file"
+                   ng-file-select="onFileSelect($files)"
+                   required autofocus>
+            <blockquote><p>Or drop me your JSON file!</p></blockquote>
+          </div>
+      </form>
+    </div>
+
+    <!-- Otherwise, display results -->
+    <table class="results" ng-show="results">
+      <tr class="rolesets" ng-repeat-start="roleset in results">
+        <td>&nbsp;</td>
+        <td ng-repeat="role in roleset.roles"
+            colspan="{{ role.tests }}">
+          {{ role.name }}
+        </td>
+        <td ng-show="!roleset.roles.length">&nbsp;</td>
+      </tr>
+      <tr class="specs">
+        <td>&nbsp;</td>
+        <td ng-repeat="spec in roleset.specs"
+            colspan="{{ spec.tests }}">
+          {{ spec.name }}
+        </td>
+        <td ng-show="!roleset.specs.length"
+            colspan="10">
+          No tests available
+        </td>
+      </tr>
+      <tr ng-repeat="result in roleset.results"
+          ng-repeat-end>
+        <td class="hostname" style="border-left-color: {{ result.color }}">
+          {{ result.name }}
+        </td>
+        <td ng-repeat="r in result.results"
+            class="test status-{{ r.test.status }}">
+          <span ng-click="details(result.name, r)"></span>
+        </td>
+      </tr>
+    </table>
+
+    <script type="text/ng-template" id="details.html">
+        <div class="modal-header">
+            <h3>{{ hostname }}</h3>
+        </div>
+        <div class="modal-body">
+          <dl>
+            <dt>Host</dt>
+            <dd>{{ hostname }}</dd>
+            <dt>Location</dt>
+            <dd>{{ file_path }}:{{ line_number }}</dd>
+            <dt>Status</dt>
+            <dd class="status-{{ status }}">{{ status }}</dd>
+            <dt>Description</dt>
+            <dd>{{ description }}</dd>
+          </dl>
+          <div class="exception" ng-show="exception">
+            <h4>{{ exception.class }}: {{ exception.message }}</h4>
+            <span ng-repeat="line in exception.backtrace">{{ line }}</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+        </div>
+    </script>
+
+  </body>
+</html>
