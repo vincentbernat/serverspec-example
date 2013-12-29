@@ -123,4 +123,10 @@ dd.status-passed {
     font-family: monospace;
     white-space: nowrap;
     display: block;
+    font-size: 13px;
+}
+
+pre.prettyprint {
+    clear: both;
+    margin: 1em 0;
 }

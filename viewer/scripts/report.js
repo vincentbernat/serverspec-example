@@ -13,8 +13,8 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$tooltip"
         reader.addEventListener("loadend", function() {
             $scope.$apply(function(scope) {
                 var input = JSON.parse(reader.result);
-                var tests = input.tests
-                scope.results = formatResults(tests);
+                scope.results = formatResults(input.tests);
+                scope.sources = input.sources;
                 scope.filename = file.name;
                 console.log("Results have been extracted from " + scope.filename);
             });
@@ -29,7 +29,26 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$tooltip"
             controller: "resultDetailsCtrl",
             resolve: {
                 result: function() { return result; },
-                hostname: function() { return hostname; }
+                hostname: function() { return hostname; },
+                source: function() {
+                    // Extract the appropriate source snippet.
+                    var file = result.test.file_path;
+                    var start = result.test.line_number;
+                    var end = result.test.line_number;
+                    var source = $scope.sources[file];
+                    // We search for the first blank lines followed by a non-idented line
+                    while (start > 1 &&
+                           (source[start - 1] !== "" ||
+                            (source[start] || "").match(/^\s/) !== null)) start--;
+                    while (source[end - 1] !== undefined &&
+                           (source[end - 1] !== "" ||
+                            (source[end - 2] || "").match(/^\s/) !== null)) end++;
+                    start++; end--;
+                    return {
+                        "start": start,
+                        "snippet": source.slice(start - 1, end)
+                    }
+                }
             }
         });
     };
@@ -68,16 +87,29 @@ reportResultsApp.directive(
     }
 ]);
 
+reportResultsApp.directive(
+    "rrPrettyprint", [ "$timeout", function($timeout) {
+        return {
+            restrict: 'A',
+            link: function(scope, element, attr) {
+                element.addClass("prettyprint");
+                $timeout(function() { prettyPrint(); }, 1);
+            }
+        };
+    }]);
+
 reportResultsApp.controller(
     "resultDetailsCtrl",
-    [ "$scope", "$modalInstance", "result", "hostname",
-      function ($scope, $modalInstance, result, hostname) {
+    [ "$scope", "$modalInstance", "result", "hostname", "source",
+      function ($scope, $modalInstance, result, hostname, source) {
           $scope.hostname = hostname;
           $scope.file_path = result.test.file_path;
           $scope.line_number = result.test.line_number;
           $scope.description = result.test.full_description;
           $scope.status = result.test.status;
           $scope.exception = result.test.exception;
+          $scope.source_start = source.start;
+          $scope.source_snippet = source.snippet.join("\n");
 
           $scope.ok = function () {
               $modalInstance.dismiss('ok');
