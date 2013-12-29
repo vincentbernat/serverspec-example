@@ -68,6 +68,7 @@ input {
 .results .specs {
     font-style: italic;
     text-align: center;
+    font-size: small;
 }
 
 .results tr.rolesets td,
