@@ -12,7 +12,9 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$tooltip"
         var file = $files[0];
         reader.addEventListener("loadend", function() {
             $scope.$apply(function(scope) {
-                scope.results = formatResults(JSON.parse(reader.result));
+                var input = JSON.parse(reader.result);
+                var tests = input.tests
+                scope.results = formatResults(tests);
                 scope.filename = file.name;
                 console.log("Results have been extracted from " + scope.filename);
             });

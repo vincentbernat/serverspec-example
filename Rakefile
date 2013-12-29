@@ -126,13 +126,26 @@ namespace :reports do
     now = Time.now
     fname = "#{$REPORTS}/run-%s.json" % [ now.strftime("%Y-%m-%dT%H:%M:%S") ]
     File.open(fname, "w") { |f|
-      f.puts JSON.generate(FileList.new("#{$REPORTS}/current/*.json").sort.map { |j|
-                             content = File.read(j).strip
-                             {
-                               :hostname => File.basename(j, ".json"),
-                               :results => JSON.parse(content.empty? ? "{}" : content)
-                             }
-                           }.to_a)
+      # Test results
+      tests = FileList.new("#{$REPORTS}/current/*.json").sort.map { |j|
+        content = File.read(j).strip
+        {
+          :hostname => File.basename(j, ".json"),
+          :results => JSON.parse(content.empty? ? "{}" : content)
+        }
+      }.to_a
+      # Relevant source files
+      sources = FileList.new("#{$REPORTS}/current/*.json").sort.map { |j|
+        content = File.read(j).strip
+        results = JSON.parse(content.empty? ? '{"examples": []}' : content)["examples"]
+        results.map { |r| r["file_path"] }
+      }.to_a.flatten(1).uniq
+      sources = sources.each_with_object(Hash.new) { |f, h|
+        h[f] = File.readlines(f).map { |l| l.chomp }.to_a
+      }
+      f.puts JSON.generate({ :version => 1,
+                             :tests => tests,
+                             :sources => sources })
     }
   end
 end
