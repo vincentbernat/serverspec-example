@@ -21,7 +21,7 @@ def roles(host)
   when /^blm-proxy-/
     roles << "proxy"
   end
-  return roles
+  roles
 end
 
 
