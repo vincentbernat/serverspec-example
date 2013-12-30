@@ -1,12 +1,10 @@
 require 'rake'
 require 'rspec/core/rake_task'
-require 'xpool'
 require 'colorize'
 require 'json'
 
 $HOSTS    = "./hosts"           # List of all hosts
 $REPORTS  = "./reports"         # Where to store JSON reports
-$PARALLEL = 10                  # How many parallel tasks should we run?
 
 # Return all roles of a given host
 def roles(host)
@@ -26,13 +24,18 @@ def roles(host)
   return roles
 end
 
-# Run RSpec in the background. It is important to define this before
-# creating a pool.
-class BackgroundServerspecTask
 
-  def run(verbose, target, command, json)
-    ENV['TARGET_HOST'] = target
-    system(command)
+# Special version of RakeTask for serverspec which comes with better
+# reporting
+class ServerspecTask < RSpec::Core::RakeTask
+
+  attr_accessor :target
+
+  # Run our serverspec task. Errors are ignored.
+  def run_task(verbose)
+    json = "#{$REPORTS}/current/#{target}.json"
+    @rspec_opts = ["--format", "json", "--out", json]
+    system("env TARGET_HOST=#{target} #{spec_command}")
     status(target, json) if verbose
   end
 
@@ -53,26 +56,6 @@ class BackgroundServerspecTask
     end
   end
 
-end
-
-# Special version of RakeTask that will be executed using a process
-# pool. This process pool is handled by xpool.
-class ServerspecTask < RSpec::Core::RakeTask
-
-  attr_accessor :target
-
-  @@pool = XPool.new $PARALLEL
-
-  def self.shutdown
-    @@pool.shutdown
-  end
-
-  def run_task(verbose)
-    json = "#{$REPORTS}/current/#{target}.json"
-    @rspec_opts = ["--format", "json", "--out", json]
-    command = spec_command
-    @@pool.schedule BackgroundServerspecTask.new, verbose, target, command, json
-  end
 end
 
 hosts = File.foreach(ENV["HOSTS"] || $HOSTS)
@@ -159,11 +142,6 @@ if not check_tasks.empty? then
 
   # Build final report
   Rake::Task[check_tasks.last].enhance do
-    ServerspecTask.shutdown
     Rake::Task["reports:build"].invoke
   end
-end
-
-Kernel.at_exit do
-  ServerspecTask.shutdown
 end

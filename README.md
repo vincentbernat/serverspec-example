@@ -62,11 +62,9 @@ Parallel execution
 ------------------
 
 With many hosts and many tests, serial execution can take some
-time. By using a pool of processes to run tests (with [xpool][]), it
-is possible to speed up test execution. You may want to modify the
-`$PARALLEL` at the top of `Rakefile` for more parallelism.
-
-[xpool]: https://github.com/robgleeson/xpool
+time. By using a pool of processes to run tests, it is possible to
+speed up test execution. `rake` comes with builtin support of such
+feature. Just execute it with `-j 10 -m`.
 
 Reports
 -------
