@@ -34,6 +34,11 @@ roles:
     $ bundle exec rake check:role:web
     $ bundle exec rake check:server:blm-web-22.example.com
 
+Also note that `sudo` is disabled in `spec/spec_helper.rb`. You can
+enable it globally or locally, like explained [here][1].
+
+[1]: http://serverspec.org/advanced_tips.html
+
 Classifier
 ----------
 
