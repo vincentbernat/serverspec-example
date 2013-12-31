@@ -59,7 +59,7 @@ input {
 }
 .results .hostname {
     font-weight: bold;
-    padding-left: 1em;
+    padding: 0 1em;
 }
 .results .rolesets td {
     font-weight: bold;
