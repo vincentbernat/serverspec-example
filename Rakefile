@@ -134,19 +134,22 @@ namespace :reports do
 end
 
 # Before starting any task, cleanup reports
-check_tasks = Rake.application.tasks.select { |task|
+all_check_tasks = Rake.application.tasks.select { |task|
   task.name.start_with?("check:")
 }
-check_tasks.each { |t|
+all_check_tasks.each { |t|
   t.enhance [ "reports:clean" ]
 }
 
 # Build final report only after last check
-check_tasks = Rake.application.top_level_tasks.select { |task|
+running_check_tasks = Rake.application.top_level_tasks.select { |task|
   task.start_with?("check:") or task == "spec"
 }
-if not check_tasks.empty? then
-  Rake::Task[check_tasks.last].enhance do
+if not running_check_tasks.empty? then
+  Rake::Task[running_check_tasks.last].enhance do
     Rake::Task["reports:build"].invoke
   end
+  running_check_tasks.each { |t|
+    task "reports:build" => t
+  }
 end
