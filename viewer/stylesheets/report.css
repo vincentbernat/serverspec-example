@@ -28,11 +28,17 @@
     display: block;
     width: 0;
 }
-input {
+input[type=text] {
+    width: 90%;
+}
+input[type=file] {
     padding: 0 0.5em;
     box-shadow: inset 0 0 5px #ccc;
     border-radius: 10px;
     display: inline-block;
+}
+input[type=file] {
+    margin-top: 350px;
 }
 
 .body {

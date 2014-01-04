@@ -20,20 +20,27 @@
     <script src="scripts/report.js"></script>
 
   </head>
-  <body ng-controller="reportResultCtrl">
+  <body>
+    <ng-view></ng-view>
+
+    <script type="text/ng-template" id="main.html">
 
     <!-- When we don't have any results, display file uploader -->
     <div ng-show="!results" class="container">
-      <form role="form">
+      <form role="form" ng-submit="load()">
           <div class="dropzone"
                ng-file-drop="onFileSelect($files)"
                ng-show="dropSupported"
                ng-file-drop-available="dropSupported=true">
+            <input type="text"
+                   ng-model="url"
+                   placeholder="Enter an URL"
+                   required>
+            <blockquote><p>Or drop me your JSON file!</p></blockquote>
             <input type="file"
                    placeholder="JSON file"
                    ng-file-select="onFileSelect($files)"
-                   required autofocus>
-            <blockquote><p>Or drop me your JSON file!</p></blockquote>
+                   autofocus>
           </div>
       </form>
     </div>
@@ -75,6 +82,8 @@
     </table>
     </div>
     </div>
+
+    </script>
 
     <!-- Template for modal dialog with test details -->
     <script type="text/ng-template" id="details.html">

@@ -1,10 +1,47 @@
 "use strict";
 
-var reportResultsApp = angular.module("reportResultsApp", ['angularFileUpload', 'ui.bootstrap']);
+var reportResultsApp = angular.module("reportResultsApp", ['ngRoute', 'angularFileUpload', 'ui.bootstrap']);
 
-reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", function($scope, $modal) {
-    $scope.results = null;
-    $scope.filename = null;
+reportResultsApp.config([ "$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
+    $locationProvider.html5Mode(false);
+    $routeProvider.
+        when("/", {
+            templateUrl: "main.html",
+            controller: "reportResultCtrl",
+            resolve: {
+                data: function() { return null },
+                filename: function() { return null },
+            }
+        }).
+
+        when("/url/:url*", {
+            templateUrl: "main.html",
+            controller: "reportResultCtrl",
+            resolve: {
+                filename: ["$route", function($route) {
+                    return $route.current.params.url;
+                }],
+                data: ["$http", "$route", function($http, $route) {
+                    console.log($route.current.params);
+                    return $http({ method: "GET",
+                                   url: $route.current.params.url }).then(function(response) {
+                                       return response.data;
+                                   }, function() { return null });
+                }]
+            }
+        }).
+
+        otherwise({
+            redirectTo: "/"
+        });
+}]);
+
+reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$location", "data", "filename",
+                                                  function($scope, $modal, $location, data, filename) {
+    $scope.results = data?formatResults(data.tests):null;
+    $scope.sources = data?data.sources:null;
+    $scope.filename = filename;
+    $scope.url = null;
 
     // Upload
     $scope.onFileSelect = function($files) {
@@ -21,6 +58,13 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", function($
         });
         reader.readAsBinaryString($files[0]);
     };
+
+    // Load an URL
+    $scope.load = function() {
+        var target = "/url/" + encodeURI($scope.url);
+        console.log("Loading " + target);
+        $location.path("/url/" + $scope.url);
+    }
 
     // Details of a test
     $scope.details = function (hostname, result) {
