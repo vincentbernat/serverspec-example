@@ -131,7 +131,7 @@ dd.status-passed {
     margin: 1em 0;
 }
 .prettyprint ol {
-    padding: 0 2em;
+    padding-left: 2em;
 }
 /* Number for all lines */
 .prettyprint ol li {
