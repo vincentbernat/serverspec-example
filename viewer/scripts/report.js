@@ -2,7 +2,7 @@
 
 var reportResultsApp = angular.module("reportResultsApp", ['angularFileUpload', 'ui.bootstrap']);
 
-reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$tooltip", function($scope, $modal, $tooltip) {
+reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", function($scope, $modal) {
     $scope.results = null;
     $scope.filename = null;
 
