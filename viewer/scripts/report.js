@@ -22,7 +22,7 @@ reportResultsApp.config([ "$routeProvider", "$locationProvider", function($route
                     return $route.current.params.url;
                 }],
                 data: ["$http", "$route", function($http, $route) {
-                    console.log($route.current.params);
+                    console.info("Loading from " + $route.current.params.url);
                     return $http({ method: "GET",
                                    url: $route.current.params.url }).then(function(response) {
                                        return response.data;
