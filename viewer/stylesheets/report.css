@@ -126,7 +126,14 @@ dd.status-passed {
     font-size: 13px;
 }
 
-pre.prettyprint {
+.prettyprint {
     clear: both;
     margin: 1em 0;
+}
+.prettyprint ol {
+    padding: 0 2em;
+}
+/* Number for all lines */
+.prettyprint ol li {
+    list-style-type: decimal;
 }

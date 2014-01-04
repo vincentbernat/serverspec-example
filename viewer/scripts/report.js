@@ -86,15 +86,19 @@ reportResultsApp.directive(
 ]);
 
 reportResultsApp.directive(
-    "rrPrettyprint", [ "$timeout", function($timeout) {
+    "prettyprint", function() {
         return {
-            restrict: 'A',
-            link: function(scope, element, attr) {
-                element.addClass("prettyprint");
-                $timeout(function() { prettyPrint(); }, 1);
+            scope: false,
+            replace: true,
+            restrict: 'E',
+            template: '<pre class="prettyprint"></pre>',
+            controller: function($scope, $element) {
+                $element.html(prettyPrintOne($scope.source_snippet,
+                                             "ruby",
+                                             $scope.source_start));
             }
         };
-    }]);
+    });
 
 reportResultsApp.controller(
     "resultDetailsCtrl",

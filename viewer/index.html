@@ -87,9 +87,7 @@
             <dt>Description</dt>
             <dd>{{ description }}</dd>
           </dl>
-<pre rr-prettyprint>
-{{ source_snippet }}
-</pre>
+          <prettyprint></prettyprint>
           <div class="exception" ng-show="exception">
             <h4>{{ exception.class }}: {{ exception.message }}</h4>
             <span ng-repeat="line in exception.backtrace">{{ line }}</span>
