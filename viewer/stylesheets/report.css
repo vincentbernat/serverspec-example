@@ -75,7 +75,7 @@ input {
     font-size: small;
 }
 .results .specs td {
-    margin: 0 0.3em;
+    padding: 0 0.3em;
 }
 
 .results tr.rolesets td,
