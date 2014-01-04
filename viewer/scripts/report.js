@@ -72,6 +72,7 @@ reportResultsApp.directive(
                         inside = angular.element("<span>");
                     }
                     if (inside.attr("tooltip") === scope.content) return;
+                    inside.attr("tooltip-placement", "left");
                     inside.attr("tooltip", scope.content);
 
                     // And insert it
