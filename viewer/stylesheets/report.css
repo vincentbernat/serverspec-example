@@ -42,6 +42,7 @@ input {
 
 .results {
     margin: auto;
+    width: 100%;
 }
 .results .test.status-passed {
     background-color: #32cd32;
@@ -53,28 +54,37 @@ input {
     background-color: #ff6347;
 }
 .results .test span {
-    min-width: 1.5em;
+    min-width: 0.5em;
     min-height: 1.5em;
     display: block;
 }
 .results .hostname {
     font-weight: bold;
     padding: 0 1em;
+    min-height: 1.5em;
+    text-align: right;
 }
 .results .rolesets td {
     font-weight: bold;
-    padding-left: 1em;
+    padding-left: 0.8em;
+    padding-right: 0.4em;
 }
 .results .specs {
     font-style: italic;
     text-align: center;
     font-size: small;
 }
+.results .specs td {
+    margin: 0 0.3em;
+}
 
 .results tr.rolesets td,
-.results tr.specs td,
-.results td.hostname {
+.results tr.specs td {
     border-right: black solid 2px;
+}
+.results tr.rolesets td:first-child,
+.results tr.specs td:first-child {
+    border-right: none;
 }
 .results td.hostname {
     border-left: black solid 4px;
@@ -87,6 +97,25 @@ input {
 }
 .results .rolesets td:last-child, .results .specs td:last-child {
     border-right: none;
+}
+
+.outer-results { position: relative }
+.inner-results {
+    overflow-x: overlay;
+    overflow-y: visible;
+    margin-left: 20em;
+    font-weight: bold;
+    padding-bottom: 2em;
+}
+.results tr td:first-child {
+    position: absolute;
+    left: 0;
+    width: 20em;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+.results {
+    font-weight: normal;
 }
 
 .modal {

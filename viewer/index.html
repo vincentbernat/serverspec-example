@@ -38,6 +38,8 @@
     </div>
 
     <!-- Otherwise, display results -->
+    <div class="outer-results">
+    <div class="inner-results">
     <table class="results" ng-show="results">
       <tr class="rolesets" ng-repeat-start="roleset in results">
         <td>&nbsp;</td>
@@ -70,6 +72,8 @@
         </td>
       </tr>
     </table>
+    </div>
+    </div>
 
     <!-- Template for modal dialog with test details -->
     <script type="text/ng-template" id="details.html">
