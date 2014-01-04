@@ -62,26 +62,24 @@ reportResultsApp.directive(
             scope: {
                 content: '@rrTooltip'
             },
-            compile: function($element, attr) {
-                return function(scope, element, attr) {
-                    element.on("mouseenter", function(event) {
-                        // Only now, we will build the new element
-                        // with the tooltip if it doesn't exist (or
-                        // doesn't match the tooltip)
-                        var inside = element.children();
-                        if (!inside.length) {
-                            inside = angular.element("<span>");
-                        }
-                        if (inside.attr("tooltip") === scope.content) return;
-                        inside.attr("tooltip", scope.content);
+            link: function(scope, element, attr) {
+                element.on("mouseenter", function(event) {
+                    // Only now, we will build the new element
+                    // with the tooltip if it doesn't exist (or
+                    // doesn't match the tooltip)
+                    var inside = element.children();
+                    if (!inside.length) {
+                        inside = angular.element("<span>");
+                    }
+                    if (inside.attr("tooltip") === scope.content) return;
+                    inside.attr("tooltip", scope.content);
 
-                        // And insert it
-                        var compiled = $compile(inside);
-                        var linked = compiled(scope);
-                        element.empty();
-                        element.append(linked);
-                    });
-                }
+                    // And insert it
+                    var compiled = $compile(inside);
+                    var linked = compiled(scope);
+                    element.empty();
+                    element.append(linked);
+                });
             }
         }
     }
