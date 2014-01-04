@@ -96,6 +96,10 @@ reportResultsApp.directive(
                 $element.html(prettyPrintOne($scope.source_snippet,
                                              "ruby",
                                              $scope.source_start));
+                angular.element($element
+                                .removeClass("highlighted")
+                                .find("li")[$scope.line_number - $scope.source_start])
+                    .addClass("highlighted");
             }
         };
     });

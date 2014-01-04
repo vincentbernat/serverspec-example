@@ -137,3 +137,7 @@ dd.status-passed {
 .prettyprint ol li {
     list-style-type: decimal;
 }
+.prettyprint ol li.highlighted {
+    color: #b94a48;
+    background-color: #f2dede;
+}
