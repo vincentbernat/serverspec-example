@@ -1,10 +1,10 @@
 .dropzone {
     text-align: center;
-    padding: 5em;
+    padding: 1em;
     background-repeat: no-repeat;
     background-image: url(../images/domokun.png);
-    background-position: center 10em;
-    height: 500px;
+    background-position: center 6em;
+    height: 600px;
     font-size: 2em;
 
 }
@@ -178,4 +178,15 @@ dd.status-passed {
 .prettyprint ol li.highlighted {
     color: #b94a48;
     background-color: #f2dede;
+}
+
+.browser {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.browser ul {
+    -moz-column-count: 4;
+    -webkit-column-count: 4;
+    column-count: 4;
 }

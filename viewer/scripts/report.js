@@ -9,8 +9,9 @@ reportResultsApp.config([ "$routeProvider", "$locationProvider", function($route
             templateUrl: "upload.html",
             controller: "uploadCtrl",
             resolve: {
-                data: function() { return null },
-                filename: function() { return null },
+                files: ["$route", "AvailableReports", function($route, AvailableReports) {
+                    return AvailableReports.fetch($route.current.params.url);
+                }]
             }
         }).
 
@@ -42,16 +43,6 @@ reportResultsApp.config([ "$routeProvider", "$locationProvider", function($route
                     var data = ResultData.fetch();
                     console.info("Loading from local file " + $route.current.params.filename);
                     return data;
-                }]
-            }
-        }).
-
-        when("/dir/:url*?", {
-            templateUrl: "directory.html",
-            controller: "directoryCtrl",
-            resolve: {
-                files: ["$route", "AvailableReports", function($route, AvailableReports) {
-                    return AvailableReports.fetch($route.current.params.url);
                 }]
             }
         }).
@@ -98,14 +89,13 @@ reportResultsApp.factory("ResultData", function() {
     };
 });
 
-reportResultsApp.controller("directoryCtrl", [ "$scope", "$location", "files", function($scope, $location, files) {
+reportResultsApp.controller("uploadCtrl", [ "$scope", "$location", "ResultData", "files", function($scope, $location, ResultData, files) {
+    // Select a file
     $scope.files = files;
     $scope.visit = function(file) {
         $location.path("/url/" + file);
     };
-}]);
 
-reportResultsApp.controller("uploadCtrl", [ "$scope", "$location", "ResultData", function($scope, $location, ResultData) {
     // Upload a file
     $scope.onFileSelect = function($files) {
         var reader = new FileReader();
