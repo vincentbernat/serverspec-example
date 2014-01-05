@@ -80,6 +80,7 @@
           <span ng-click="details(result.name, r)"
                 rr-tooltip="{{ r.test.full_description }}"></span>
         </td>
+        <td ng-show="!result.results.length" class="test" style="border: none"><span>&nbsp;</span></td>
       </tr>
     </table>
     </div>
