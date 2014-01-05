@@ -46,9 +46,45 @@ reportResultsApp.config([ "$routeProvider", "$locationProvider", function($route
             }
         }).
 
+        when("/dir/:url*?", {
+            templateUrl: "directory.html",
+            controller: "directoryCtrl",
+            resolve: {
+                files: ["$route", "AvailableReports", function($route, AvailableReports) {
+                    return AvailableReports.fetch($route.current.params.url);
+                }]
+            }
+        }).
+
         otherwise({
             redirectTo: "/upload"
         });
+}]);
+
+reportResultsApp.factory("AvailableReports", [ "$http", function($http) {
+    return {
+        "fetch": function(directory) {
+            directory = directory || "../reports/";
+            console.info("Loading available JSON files from " + directory);
+            return $http({ method: "GET",
+                           url: directory }).then(function(response) {
+                               // Extract URL from HTML source code
+                               var re = /a href="(run-[^"]+\.json)"/g;
+                               var files = [];
+                               var partial;
+                               while ((partial = re.exec(response.data)) !== null) {
+                                   files.push(partial[1]);
+                               }
+                               // We assume that the files are already sorted
+                               return _.map(files, function(file) {
+                                   return {
+                                       path: directory + file,
+                                       name: decodeURIComponent(file)
+                                   };
+                               });
+                           }, function() { return [] });
+        }
+    };
 }]);
 
 // We use this service to pass data between upoadCtrl and reportResultCtrl
@@ -59,6 +95,13 @@ reportResultsApp.factory("ResultData", function() {
         "fetch": function() { return current }
     };
 });
+
+reportResultsApp.controller("directoryCtrl", [ "$scope", "$location", "files", function($scope, $location, files) {
+    $scope.files = files;
+    $scope.visit = function(file) {
+        $location.path("/url/" + file);
+    };
+}]);
 
 reportResultsApp.controller("uploadCtrl", [ "$scope", "$location", "ResultData", function($scope, $location, ResultData) {
     // Upload a file

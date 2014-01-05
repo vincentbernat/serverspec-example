@@ -114,5 +114,14 @@
         </div>
     </script>
 
+    <!-- Template for directory listing -->
+    <script type="text/ng-template" id="directory.html">
+      <ul>
+        <li ng-repeat="file in files">
+          <a href ng-click="visit(file.path)">{{ file.name }}</a>
+        </li>
+      </ul>
+    </script>
+
   </body>
 </html>
