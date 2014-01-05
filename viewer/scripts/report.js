@@ -96,7 +96,21 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$location
     $scope.details = function (hostname, result) {
         var modalInstance = $modal.open({
             templateUrl: "details.html",
-            controller: "resultDetailsCtrl",
+            controller: [ "$scope", "$modalInstance", "result", "hostname", "source",
+                          function ($scope, $modalInstance, result, hostname, source) {
+                              $scope.hostname = hostname;
+                              $scope.file_path = result.test.file_path;
+                              $scope.line_number = result.test.line_number;
+                              $scope.description = result.test.full_description;
+                              $scope.status = result.test.status;
+                              $scope.exception = result.test.exception;
+                              $scope.source_start = source.start;
+                              $scope.source_snippet = source.snippet.join("\n");
+
+                              $scope.ok = function () {
+                                  $modalInstance.dismiss('ok');
+                              };
+                          }],
             resolve: {
                 result: function() { return result; },
                 hostname: function() { return hostname; },
@@ -174,24 +188,6 @@ reportResultsApp.directive(
             }
         };
     });
-
-reportResultsApp.controller(
-    "resultDetailsCtrl",
-    [ "$scope", "$modalInstance", "result", "hostname", "source",
-      function ($scope, $modalInstance, result, hostname, source) {
-          $scope.hostname = hostname;
-          $scope.file_path = result.test.file_path;
-          $scope.line_number = result.test.line_number;
-          $scope.description = result.test.full_description;
-          $scope.status = result.test.status;
-          $scope.exception = result.test.exception;
-          $scope.source_start = source.start;
-          $scope.source_snippet = source.snippet.join("\n");
-
-          $scope.ok = function () {
-              $modalInstance.dismiss('ok');
-          };
-      }]);
 
 // Format results to display them more effectively
 var formatResults = function(input) {
