@@ -23,10 +23,10 @@
   <body>
     <ng-view></ng-view>
 
-    <script type="text/ng-template" id="main.html">
 
+    <script type="text/ng-template" id="upload.html">
     <!-- When we don't have any results, display file uploader -->
-    <div ng-show="!results" class="container">
+    <div class="container">
       <form role="form" ng-submit="load()">
           <div class="dropzone"
                ng-file-drop="onFileSelect($files)"
@@ -44,11 +44,13 @@
           </div>
       </form>
     </div>
+    </script>
 
     <!-- Otherwise, display results -->
+    <script type="text/ng-template" id="result.html">
     <div class="outer-results">
     <div class="inner-results">
-    <table class="results" ng-show="results">
+    <table class="results">
       <tr class="rolesets" ng-repeat-start="roleset in results">
         <td>&nbsp;</td>
         <td ng-repeat="role in roleset.roles"

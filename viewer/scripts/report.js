@@ -5,9 +5,9 @@ var reportResultsApp = angular.module("reportResultsApp", ['ngRoute', 'angularFi
 reportResultsApp.config([ "$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(false);
     $routeProvider.
-        when("/", {
-            templateUrl: "main.html",
-            controller: "reportResultCtrl",
+        when("/upload", {
+            templateUrl: "upload.html",
+            controller: "uploadCtrl",
             resolve: {
                 data: function() { return null },
                 filename: function() { return null },
@@ -15,7 +15,7 @@ reportResultsApp.config([ "$routeProvider", "$locationProvider", function($route
         }).
 
         when("/url/:url*", {
-            templateUrl: "main.html",
+            templateUrl: "result.html",
             controller: "reportResultCtrl",
             resolve: {
                 filename: ["$route", function($route) {
@@ -31,29 +31,45 @@ reportResultsApp.config([ "$routeProvider", "$locationProvider", function($route
             }
         }).
 
+        when("/file/:filename*", {
+            templateUrl: "result.html",
+            controller: "reportResultCtrl",
+            resolve: {
+                filename: ["$route", function($route) {
+                    return $route.current.params.filename;
+                }],
+                data: ["$route", "ResultData", function($route, ResultData) {
+                    var data = ResultData.fetch();
+                    console.info("Loading from local file " + $route.current.params.filename);
+                    return data;
+                }]
+            }
+        }).
+
         otherwise({
-            redirectTo: "/"
+            redirectTo: "/upload"
         });
 }]);
 
-reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$location", "data", "filename",
-                                                  function($scope, $modal, $location, data, filename) {
-    $scope.results = data?formatResults(data.tests):null;
-    $scope.sources = data?data.sources:null;
-    $scope.filename = filename;
-    $scope.url = null;
+// We use this service to pass data between upoadCtrl and reportResultCtrl
+reportResultsApp.factory("ResultData", function() {
+    var current = null;
+    return {
+        "save": function(data) { current = data; return current; },
+        "fetch": function() { return current }
+    };
+});
 
-    // Upload
+reportResultsApp.controller("uploadCtrl", [ "$scope", "$location", "ResultData", function($scope, $location, ResultData) {
+    // Upload a file
     $scope.onFileSelect = function($files) {
         var reader = new FileReader();
         var file = $files[0];
         reader.addEventListener("loadend", function() {
             $scope.$apply(function(scope) {
                 var input = JSON.parse(reader.result);
-                scope.results = formatResults(input.tests);
-                scope.sources = input.sources;
-                scope.filename = file.name;
-                console.log("Results have been extracted from " + scope.filename);
+                ResultData.save(input);
+                $location.path("/file/" + file.name);
             });
         });
         reader.readAsBinaryString($files[0]);
@@ -62,8 +78,18 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$location
     // Load an URL
     $scope.load = function() {
         var target = "/url/" + encodeURI($scope.url);
-        console.log("Loading " + target);
         $location.path("/url/" + $scope.url);
+    }
+}]);
+
+reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$location", "data", "filename", function($scope, $modal, $location, data, filename) {
+    if (data === null) {
+        console.warn("No data available, go back to upload");
+        $location.path("/");
+    } else {
+        $scope.results = formatResults(data.tests);
+        $scope.sources = data.sources;
+        $scope.filename = filename;
     }
 
     // Details of a test
