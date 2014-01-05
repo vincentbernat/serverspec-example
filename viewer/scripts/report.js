@@ -77,8 +77,10 @@ reportResultsApp.factory("AvailableReports", [ "$http", function($http) {
                                }
                                // We assume that the files are already sorted
                                return _.map(files, function(file) {
+                                   var a = document.createElement('a');
+                                   a.href = directory + file;
                                    return {
-                                       path: directory + file,
+                                       path: a.href,
                                        name: decodeURIComponent(file)
                                    };
                                });
