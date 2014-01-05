@@ -124,9 +124,12 @@ input[type=file] {
     font-weight: normal;
 }
 
-.modal {
+.wider-modal {
     width: 900px;
     margin-left: -450px;
+}
+.wider-modal .modal-body {
+    max-height: 600px;
 }
 dd, dt {
     float: left;

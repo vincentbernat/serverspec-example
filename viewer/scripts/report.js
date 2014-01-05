@@ -96,6 +96,7 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$location
     $scope.details = function (hostname, result) {
         var modalInstance = $modal.open({
             templateUrl: "details.html",
+            windowClass: "wider-modal",
             controller: [ "$scope", "$modalInstance", "result", "hostname", "source",
                           function ($scope, $modalInstance, result, hostname, source) {
                               $scope.hostname = hostname;
