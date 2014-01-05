@@ -46,7 +46,7 @@
     </div>
     <div class="browser">
       <ul>
-        <li ng-repeat="file in files">
+        <li ng-repeat="file in files | limitTo:100">
           <a href ng-click="visit(file.path)">{{ file.name }}</a>
         </li>
       </ul>

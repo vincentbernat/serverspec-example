@@ -74,7 +74,7 @@ reportResultsApp.factory("AvailableReports", [ "$http", function($http) {
                                        path: a.href,
                                        name: decodeURIComponent(file)
                                    };
-                               });
+                               }).reverse();
                            }, function() { return [] });
         }
     };
