@@ -105,9 +105,10 @@ namespace :reports do
   end
 
   desc "Build final report"
-  task :build do
+  task :build, :tasks do |t, args|
+    args.with_defaults(:tasks => [ "unspecified" ])
     now = Time.now
-    fname = "#{$REPORTS}/run-%s.json" % [ now.strftime("%Y-%m-%dT%H:%M:%S") ]
+    fname = "#{$REPORTS}/%s--%s.json" % [ args[:tasks].join("-"), now.strftime("%Y-%m-%dT%H:%M:%S") ]
     File.open(fname, "w") { |f|
       # Test results
       tests = FileList.new("#{$REPORTS}/current/*.json").sort.map { |j|
@@ -147,7 +148,7 @@ running_check_tasks = Rake.application.top_level_tasks.select { |task|
 }
 if not running_check_tasks.empty? then
   Rake::Task[running_check_tasks.last].enhance do
-    Rake::Task["reports:build"].invoke
+    Rake::Task["reports:build"].invoke(running_check_tasks)
   end
   running_check_tasks.each { |t|
     task "reports:build" => t
