@@ -60,20 +60,25 @@ reportResultsApp.factory("AvailableReports", [ "$http", function($http) {
             return $http({ method: "GET",
                            url: directory }).then(function(response) {
                                // Extract URL from HTML source code
-                               var re = /a href="(run-[^"]+\.json)"/g;
+                               var re = /a href="([^"]+\.json)"/g;
                                var files = [];
                                var partial;
                                while ((partial = re.exec(response.data)) !== null) {
                                    files.push(partial[1]);
                                }
                                // We assume that the files are already sorted
-                               return _.map(files, function(file) {
+                               return _.sortBy(_.map(files, function(file) {
                                    var a = document.createElement('a');
                                    a.href = directory + file;
                                    return {
                                        path: a.href,
                                        name: decodeURIComponent(file)
                                    };
+                               }), function(file) {
+                                   // We extract the date and sort through that
+                                   var mo = file.name.match(/--(.+)\.json$/);
+                                   var date = mo?mo[1]:"1970-01-01T01:00:00";
+                                   return date + "---" + file;
                                }).reverse();
                            }, function() { return [] });
         }
