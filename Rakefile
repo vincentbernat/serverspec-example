@@ -128,6 +128,14 @@ namespace :reports do
     }
   end
 
+  desc "Gzip all reports"
+  task :gzip do
+    FileList.new("#{$REPORTS}/*.json").each { |f|
+      system "gzip", f
+    }
+  end
+  task :gzip => "housekeep"
+
   desc "Build final report"
   task :build, :tasks do |t, args|
     args.with_defaults(:tasks => [ "unspecified" ])
