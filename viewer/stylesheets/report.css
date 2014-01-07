@@ -183,10 +183,12 @@ dd.status-passed {
 .browser {
     width: 90%;
     margin: 0 auto;
-}
-
-.browser ul {
     -moz-column-count: 4;
     -webkit-column-count: 4;
     column-count: 4;
+}
+
+.browser ul a {
+    display: inline-block;
+    vertical-align: top;
 }
