@@ -60,7 +60,7 @@ reportResultsApp.factory("AvailableReports", [ "$http", function($http) {
             return $http({ method: "GET",
                            url: directory }).then(function(response) {
                                // Extract URL from HTML source code
-                               var re = /a href="([^"]+\.json)"/g;
+                               var re = /a href="([^"]+\.json)(\.gz)?"/g;
                                var files = [];
                                var partial;
                                while ((partial = re.exec(response.data)) !== null) {
