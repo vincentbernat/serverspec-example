@@ -183,9 +183,9 @@ dd.status-passed {
 .browser {
     width: 90%;
     margin: 0 auto;
-    -moz-column-count: 4;
-    -webkit-column-count: 4;
-    column-count: 4;
+    -moz-column-count: 3;
+    -webkit-column-count: 3;
+    column-count: 3;
 }
 
 .browser ul a {
