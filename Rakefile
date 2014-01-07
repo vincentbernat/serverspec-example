@@ -99,9 +99,33 @@ namespace :check do
 end
 
 namespace :reports do
-  desc "Clean up old reports"
+  desc "Clean up old partial reports"
   task :clean do
     FileUtils.rm_rf "#{$REPORTS}/current"
+  end
+
+  desc "Clean reports without results"
+  task :housekeep do
+    FileList.new("#{$REPORTS}/*.json").map { |f|
+      content = File.read(f)
+      if content.empty?
+        # No content, let's remove it
+        f
+      else
+        results = JSON.parse(content)
+        if not results.include?("tests") or results["tests"].map { |t|
+            if t.include?("results") and
+                t["results"].include?("examples") and
+                not t["results"]["examples"].empty?
+              t
+            end
+          }.reject { |c| c == nil }.empty?
+          f
+        end
+      end
+    }.reject { |c| c == nil }.each { |f|
+      FileUtils.rm f
+    }
   end
 
   desc "Build final report"
