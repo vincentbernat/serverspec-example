@@ -74,3 +74,27 @@ JSON format. They can be examined with a simple HTML viewer provided
 in `viewer/` directory. Provide a report and you will get a grid view
 of tests executed succesfully or not. By clicking on one result,
 you'll get details of what happened, including the backtrace if any.
+
+There is a task `reports:gzip` which will gzip reports (and remove
+empty ones). To be able to still use them without manual unzip, you
+need a configuration like this in nginx to be able to serve them:
+
+    server {
+       listen 80;
+       server_name serverspec.vbernat.deezerdev.com;
+    
+       location / {
+          index index.html;
+          root /path/to/serverspec/repo/viewer;
+       }
+       location /reports {
+          autoindex on;
+          root /path/to/serverspec/repo;
+          gzip_static always;
+          gzip_http_version 1.0;
+          gunzip on;
+       }
+    }
+
+If your version of nginx does not support `gunzip on`, you will
+usually be fine without it...
