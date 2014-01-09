@@ -139,11 +139,11 @@ namespace :reports do
                 not t["results"]["examples"].empty?
               t
             end
-          }.reject { |c| c == nil }.empty?
+          }.compact.empty?
           f
         end
       end
-    }.reject { |c| c == nil }.each { |f|
+    }.compact.each { |f|
       FileUtils.rm f
     }
   end
