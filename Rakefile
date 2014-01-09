@@ -79,8 +79,9 @@ namespace :check do
     hosts.each do |host|
       desc "Run serverspec to host #{host[:name]}"
       ServerspecTask.new(host[:name].to_sym) do |t|
+        dirs = host[:roles] + [ host[:name] ]
         t.target = host[:name]
-        t.pattern = './spec/{' + host[:roles].join(",") + '}/*_spec.rb'
+        t.pattern = './spec/{' + dirs.join(",") + '}/*_spec.rb'
       end
     end
   end
