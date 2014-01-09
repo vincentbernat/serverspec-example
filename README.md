@@ -58,6 +58,17 @@ structure for three roles:
     └── web
         └── apache2_spec.rb
 
+Moreover, there is a `tags()` function whose purpose is to attach tags
+to tests. Those tags are then made available for conditional
+tests. You can do something like this with them:
+
+    describe file('/data/images'), :tag => "paris" do
+      it { should be_mounted.with( :type => 'nfs' ) }
+    end
+
+This test will only be executed if `paris` is one of the tags of the
+current host.
+
 Parallel execution
 ------------------
 

@@ -24,18 +24,35 @@ def roles(host)
   roles
 end
 
+# Return all tags associated to an host
+def tags(host)
+  tags = []
+  # POP
+  case host
+  when /^[^.]+\.sg\./
+    tags << "singapore"
+  when /^[^.]+\.sd\./
+    tags << "sidney"
+  when /^[^.]+\.ny\./
+    tags << "newyork"
+  else
+    tags << "paris"
+  end
+  tags
+end
 
 # Special version of RakeTask for serverspec which comes with better
 # reporting
 class ServerspecTask < RSpec::Core::RakeTask
 
   attr_accessor :target
+  attr_accessor :tags
 
   # Run our serverspec task. Errors are ignored.
   def run_task(verbose)
     json = "#{$REPORTS}/current/#{target}.json"
     @rspec_opts = ["--format", "json", "--out", json]
-    system("env TARGET_HOST=#{target} #{spec_command}")
+    system("env TARGET_HOST=#{target} TARGET_TAGS=#{(tags || []).join(",")} #{spec_command}")
     status(target, json) if verbose
   end
 
@@ -58,14 +75,15 @@ class ServerspecTask < RSpec::Core::RakeTask
 
 end
 
-hosts = File.foreach(ENV["HOSTS"] || $HOSTS)
-  .map { |line| line.strip }
-  .map do |host|
+hosts = File.foreach(ENV["HOSTS"] || $HOSTS).map { |line| line.strip }
+hosts.map! { |host|
+  host.strip!
   {
-    :name => host.strip,
-    :roles => roles(host.strip),
+    :name => host,
+    :roles => roles(host),
+    :tags => tags(host)
   }
-end
+}
 
 desc "Run serverspec to all hosts"
 task :spec => "check:server:all"
@@ -81,6 +99,7 @@ namespace :check do
       ServerspecTask.new(host[:name].to_sym) do |t|
         dirs = host[:roles] + [ host[:name] ]
         t.target = host[:name]
+        t.tags = host[:tags]
         t.pattern = './spec/{' + dirs.join(",") + '}/*_spec.rb'
       end
     end

@@ -13,4 +13,7 @@ RSpec.configure do |c|
   user    = options[:user] || Etc.getlogin
   c.ssh   = Net::SSH.start(c.host, user, options)
   c.os    = backend.check_os
+
+  tags = (ENV['TARGET_TAGS'] || "").split(",")
+  c.filter_run_including :tag => lambda { |t| tags.include?(t) }
 end
