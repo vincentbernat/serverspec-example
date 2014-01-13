@@ -207,6 +207,7 @@ reportResultsApp.directive(
                     if (inside.attr("tooltip") === scope.content) return;
                     inside.attr("tooltip-placement", "left");
                     inside.attr("tooltip", scope.content);
+                    inside.html(element.html())
 
                     // And insert it
                     var compiled = $compile(inside);
