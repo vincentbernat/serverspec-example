@@ -85,7 +85,7 @@
         <td ng-repeat="r in result.results"
             class="test status-{{ r.test.status }}">
           <span ng-click="details(result.name, r)"
-                rr-tooltip="{{ r.test.full_description }}"></span>
+                rr-tooltip="{{ r.test.full_description }}">{{ mark(r.test.status) }}</span>
         </td>
         <td ng-show="!result.results.length" class="test" style="border: none"><span>&nbsp;</span></td>
       </tr>

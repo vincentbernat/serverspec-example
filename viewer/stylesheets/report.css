@@ -63,6 +63,7 @@ input[type=file] {
     min-width: 0.5em;
     min-height: 1.5em;
     display: block;
+    text-align: center;
 }
 .results .hostname {
     font-weight: bold;

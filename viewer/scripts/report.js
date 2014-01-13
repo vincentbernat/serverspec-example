@@ -132,6 +132,14 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$location
         $scope.filename = filename;
     }
 
+    // Transform a status in a mark
+    $scope.mark = function(status) {
+        return {
+            "failed": "✗",
+            "passed": "✓"
+        }[status] || "";
+    }
+
     // Details of a test
     $scope.details = function (hostname, result) {
         var modalInstance = $modal.open({
