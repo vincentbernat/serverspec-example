@@ -140,6 +140,10 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$location
         }[status] || "";
     }
 
+    // Tabs handling
+    $scope.select = function(rs) { rs.active = true; }
+    $scope.deselect = function(rs) { rs.active = false; }
+
     // Details of a test
     $scope.details = function (hostname, result) {
         var modalInstance = $modal.open({

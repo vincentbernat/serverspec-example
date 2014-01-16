@@ -56,8 +56,11 @@
     <!-- Otherwise, display results -->
     <script type="text/ng-template" id="result.html">
       <tabset>
-        <tab ng-repeat="roleset in results" heading="{{ roleset.name }}">
-          <div class="outer-results">
+        <tab ng-repeat="roleset in results"
+             heading="{{ roleset.name }}"
+             select="select(roleset)"
+             deselect="deselect(roleset)">
+          <div class="outer-results" ng-if="roleset.active">
             <div class="inner-results">
               <table class="results">
                 <tr class="rolesets">
