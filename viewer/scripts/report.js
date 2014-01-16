@@ -189,38 +189,6 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$location
 }]);
 
 reportResultsApp.directive(
-    "rrTooltip", [ "$compile", function($compile) {
-        return {
-            restrict: 'A',
-            scope: {
-                content: '@rrTooltip'
-            },
-            link: function(scope, element, attr) {
-                element.on("mouseenter", function(event) {
-                    // Only now, we will build the new element
-                    // with the tooltip if it doesn't exist (or
-                    // doesn't match the tooltip)
-                    var inside = element.children();
-                    if (!inside.length) {
-                        inside = angular.element("<span>");
-                    }
-                    if (inside.attr("tooltip") === scope.content) return;
-                    inside.attr("tooltip-placement", "left");
-                    inside.attr("tooltip", scope.content);
-                    inside.html(element.html())
-
-                    // And insert it
-                    var compiled = $compile(inside);
-                    var linked = compiled(scope);
-                    element.empty();
-                    element.append(linked);
-                });
-            }
-        }
-    }
-]);
-
-reportResultsApp.directive(
     "prettyprint", function() {
         return {
             scope: false,
