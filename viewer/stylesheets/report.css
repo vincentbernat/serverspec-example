@@ -169,9 +169,6 @@ dd.status-passed {
     clear: both;
     margin: 1em 0;
 }
-.prettyprint ol {
-    padding-left: 2em;
-}
 /* Number for all lines */
 .prettyprint ol li {
     list-style-type: decimal;
