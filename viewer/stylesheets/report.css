@@ -3,9 +3,8 @@
     padding: 1em;
     background-repeat: no-repeat;
     background-image: url(../images/domokun.png);
-    background-position: center 6em;
+    background-position: center 10em;
     height: 600px;
-    font-size: 2em;
 
 }
 .dropzone blockquote {
@@ -30,6 +29,7 @@
 }
 input[type=text] {
     width: 90%;
+    font-size: 2em;
 }
 input[type=file] {
     padding: 0 0.5em;
