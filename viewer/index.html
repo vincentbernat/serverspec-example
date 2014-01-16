@@ -55,45 +55,47 @@
 
     <!-- Otherwise, display results -->
     <script type="text/ng-template" id="result.html">
-    <div class="outer-results">
-    <div class="inner-results">
-    <table class="results">
-      <tr class="rolesets" ng-repeat-start="roleset in results">
-        <td>&nbsp;</td>
-        <td ng-repeat="role in roleset.roles"
-            colspan="{{ role.tests }}">
-          {{ role.name }}
-        </td>
-        <td ng-show="!roleset.roles.length">&nbsp;</td>
-      </tr>
-      <tr class="specs">
-        <td>&nbsp;</td>
-        <td ng-repeat="spec in roleset.specs"
-            colspan="{{ spec.tests }}">
-          {{ spec.name }}
-        </td>
-        <td ng-show="!roleset.specs.length"
-            colspan="10">
-          No tests available
-        </td>
-      </tr>
-      <tr ng-repeat="result in roleset.results"
-          ng-repeat-end>
-        <td class="hostname" style="border-left-color: {{ result.color }}">
-          {{ result.name }}
-        </td>
-        <td ng-repeat="r in result.results"
-            class="test status-{{ r.test.status }}">
-          <span ng-click="details(result.name, r)"
-                tooltip-placement="left"
-                tooltip="{{ r.test.full_description }}">{{ mark(r.test.status) }}</span>
-        </td>
-        <td ng-show="!result.results.length" class="test" style="border: none"><span>&nbsp;</span></td>
-      </tr>
-    </table>
-    </div>
-    </div>
-
+      <tabset>
+        <tab ng-repeat="roleset in results" heading="{{ roleset.name }}">
+          <div class="outer-results">
+            <div class="inner-results">
+              <table class="results">
+                <tr class="rolesets">
+                  <td>&nbsp;</td>
+                  <td ng-repeat="role in roleset.roles"
+                      colspan="{{ role.tests }}">
+                    {{ role.name }}
+                  </td>
+                  <td ng-show="!roleset.roles.length">&nbsp;</td>
+                </tr>
+                <tr class="specs">
+                  <td>&nbsp;</td>
+                  <td ng-repeat="spec in roleset.specs"
+                      colspan="{{ spec.tests }}">
+                    {{ spec.name }}
+                  </td>
+                  <td ng-show="!roleset.specs.length"
+                      colspan="10">
+                    No tests available
+                  </td>
+                </tr>
+                <tr ng-repeat="result in roleset.results">
+                  <td class="hostname" style="border-left-color: {{ result.color }}">
+                    {{ result.name }}
+                  </td>
+                  <td ng-repeat="r in result.results"
+                      class="test status-{{ r.test.status }}">
+                    <span ng-click="details(result.name, r)"
+                          tooltip-placement="left"
+                          tooltip="{{ r.test.full_description }}">{{ mark(r.test.status) }}</span>
+                  </td>
+                  <td ng-show="!result.results.length" class="test" style="border: none"><span>&nbsp;</span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </tab>
+      </tabset>
     </script>
 
     <!-- Template for modal dialog with test details -->

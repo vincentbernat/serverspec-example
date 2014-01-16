@@ -304,7 +304,7 @@ var formatResults = function(input) {
 
     // Display string for a role set
     var roleSetName = function(rs) {
-        return "(" + rs.join(", ") + ")";
+        return rs.join(", ");
     };
 
     // Affect a color depending on the number of success and failures
@@ -343,11 +343,14 @@ var formatResults = function(input) {
                function(x) { return JSON.stringify(x); }),
         function(a) { return -a.length });
     console.group(roleSets.length + " role sets");
-    _.each(roleSets, function (rs) { console.log(roleSetName(rs)); });
+    _.each(roleSets, function (rs) {
+        rs.name = roleSetName(rs) || "<none>";
+        console.log("(" + rs.name + ")");
+    });
     console.groupEnd();
 
     _.each(roleSets, function(rs) {
-        console.group("Process role set " + roleSetName(rs));
+        console.group("Process role set (" + rs.name + ")");
 
         // We need to get a list of all tests in a topological order
         // for the current roleset. A test is a role, a spec file and
@@ -435,7 +438,8 @@ var formatResults = function(input) {
                      "results": _.flatten(rr) };
         });
 
-        output.push({"roles": roles,
+        output.push({"name": rs.name,
+                     "roles": roles,
                      "specs": specs,
                      "results": results,
                      "tests": tests.length});
