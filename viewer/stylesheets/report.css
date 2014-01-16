@@ -125,16 +125,16 @@ input[type=file] {
     font-weight: normal;
 }
 
-.wider-modal {
-    width: 900px;
-    margin-left: -450px;
+.wider-modal .modal-dialog {
+    width: 90%;
 }
 .wider-modal .modal-body {
-    max-height: 600px;
+    overflow-y: auto;
 }
 dd, dt {
     float: left;
 }
+dd { padding-left: 1em; }
 dd + dt { clear: left; }
 dd.status-failed {
     color: #ff6347;
