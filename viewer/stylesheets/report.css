@@ -134,7 +134,7 @@ input[type=file] {
 dd, dt {
     float: left;
 }
-dd { padding-left: 1em; }
+dt { min-width: 8em; }
 dd + dt { clear: left; }
 dd.status-failed {
     color: #ff6347;
