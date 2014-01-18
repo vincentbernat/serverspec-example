@@ -57,9 +57,13 @@
     <script type="text/ng-template" id="result.html">
       <tabset>
         <tab ng-repeat="roleset in results"
-             heading="{{ roleset.name }}"
              select="select(roleset)"
              deselect="deselect(roleset)">
+          <tab-heading>{{ roleset.name }}
+            <span class="badge" ng-if="roleset.percent != null">
+              {{ roleset.percent }}%
+            </span>
+          </tab-heading>
           <div class="outer-results" ng-if="roleset.active">
             <div class="inner-results">
               <table class="results">

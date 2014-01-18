@@ -442,8 +442,15 @@ var formatResults = function(input) {
                      "results": _.flatten(rr) };
         });
 
+        var success = _.reduce(results, function(memo, r) { return memo + r.success }, 0);
+        var failure = _.reduce(results, function(memo, r) { return memo + r.failure }, 0);
+        var percent = success + failure;
+        percent = percent?(Math.round(success * 100 / percent)):null;
         output.push({"name": rs.name,
                      "roles": roles,
+                     "percent": percent,
+                     "success": success,
+                     "failure": failure,
                      "specs": specs,
                      "results": results,
                      "tests": tests.length});
