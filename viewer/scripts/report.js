@@ -138,7 +138,12 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$location
             "failed": "✗",
             "passed": "✓"
         }[status] || "";
-    }
+    };
+
+    // Text for tooltip
+    $scope.tooltip = function(test) {
+        return test.full_description.replace(/\//g, "/\u200d");
+    };
 
     // Tabs handling
     $scope.select = function(rs) { rs.active = true; }

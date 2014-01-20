@@ -94,7 +94,7 @@
                       class="test status-{{ r.test.status }}">
                     <span ng-click="details(result.name, r)"
                           tooltip-placement="left"
-                          tooltip="{{ r.test.full_description }}">{{ mark(r.test.status) }}</span>
+                          tooltip="{{ tooltip(r.test) }}">{{ mark(r.test.status) }}</span>
                   </td>
                   <td ng-show="!result.results.length" class="test" style="border: none"><span>&nbsp;</span></td>
                 </tr>
