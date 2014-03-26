@@ -142,6 +142,9 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$location
 
     // Text for tooltip
     $scope.tooltip = function(test) {
+        if (!test.full_description) {
+            return "";
+        }
         return test.full_description.replace(/\//g, "/\u200d");
     };
 
