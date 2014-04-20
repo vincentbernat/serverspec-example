@@ -201,6 +201,28 @@ reportResultsApp.controller("reportResultCtrl", [ "$scope", "$modal", "$location
 }]);
 
 reportResultsApp.directive(
+    'fastscroll', function($window, $timeout) {
+        return {
+            scope: false,
+            replace: false,
+            restrict: 'A',
+            link: function($scope, $element) {
+                var timer;
+                angular.element($window).on('scroll', function() {
+                    if (timer) {
+                        $timeout.cancel(timer);
+                        timer = null;
+                    }
+                    $element.addClass('disable-hover');
+                    timer = $timeout(function() {
+                        $element.removeClass('disable-hover');
+                    }, 500);
+                });
+            }
+        };
+    });
+
+reportResultsApp.directive(
     "prettyprint", function() {
         return {
             scope: false,
@@ -468,3 +490,7 @@ var formatResults = function(input) {
     console.groupEnd();
     return output;
 }
+
+/* Local variables: */
+/* js2-basic-offset: 4 */
+/* End: */

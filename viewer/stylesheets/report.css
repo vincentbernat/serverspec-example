@@ -1,3 +1,7 @@
+.disable-hover, .disable-hover * {
+    pointer-events: none !important;
+}
+
 .dropzone {
     text-align: center;
     padding: 1em;
