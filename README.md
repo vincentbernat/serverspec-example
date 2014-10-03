@@ -11,6 +11,9 @@ additions:
 
 [serverspec]: http://serverspec.org/
 
+Currently, this has not been updated to
+[Serverspec v2](http://serverspec.org/changes-of-v2.html).
+
 First steps
 -----------
 
