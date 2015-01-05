@@ -25,7 +25,7 @@ You also need to modify the `roles()` function at the top of the
 `Rakefile` to derive host roles from their names. The current
 classifier is unlikely to work as is.
 
-To install the dependencies, use `bundle install`.
+To install the dependencies, use `bundle install --path .bundle`.
 
 You can then run a test session:
 
