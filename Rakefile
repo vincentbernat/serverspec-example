@@ -184,6 +184,10 @@ namespace :reports do
                              :sources => sources })
     }
   end
+
+  task :view do
+    `ruby -run -e httpd . -p 5000`
+  end
 end
 
 # Before starting any task, cleanup reports
