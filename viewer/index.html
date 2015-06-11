@@ -14,7 +14,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>
-    <script src="http://angular-file-upload.appspot.com/js/angular-file-upload.js"></script>
+    <script src="http://angular-file-upload.appspot.com/js/ng-file-upload.js"></script>
     <script src="https://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
 
     <script src="scripts/report.js"></script>
@@ -29,9 +29,10 @@
     <div class="container">
       <form role="form" ng-submit="load()">
           <div class="dropzone"
-               ng-file-drop="onFileSelect($files)"
-               ng-show="dropSupported"
-               ng-file-drop-available="dropSupported=true">
+               ngf-drop
+               ngf-change="onFileSelect($files)"
+               ngf-hide-on-drop-not-available
+               ngf-drop-available="dropSupported">
             <input type="text"
                    ng-model="url"
                    placeholder="Enter an URL"
@@ -39,7 +40,8 @@
             <blockquote><p>Or drop me your JSON file!</p></blockquote>
             <input type="file"
                    placeholder="JSON file"
-                   ng-file-select="onFileSelect($files)"
+                   ngf-select
+                   ngf-change="onFileSelect($files)"
                    autofocus>
           </div>
       </form>
