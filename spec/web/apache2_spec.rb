@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'spec_helper_v2'
 
 describe package('apache2') do
   it { should be_installed }
