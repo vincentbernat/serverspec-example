@@ -10,7 +10,7 @@ $REPORTS  = "./reports"         # Where to store JSON reports
 def roles(host)
   roles = [ "all" ]
   case host
-  when /^local/
+  when /^blm-web-/
     roles << "web"
   when /^blm-memc-/
     roles << "memcache"
