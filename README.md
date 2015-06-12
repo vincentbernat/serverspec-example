@@ -13,6 +13,8 @@ additions:
 
 Currently, this has not been updated to
 [Serverspec v2](http://serverspec.org/changes-of-v2.html).
+There is a spec_helpver_v2.rb which will allow testing of v2 functions
+located in spec/
 
 First steps
 -----------
