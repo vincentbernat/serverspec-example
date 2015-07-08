@@ -1,4 +1,5 @@
 require 'rake'
+require 'rbconfig'
 require 'rspec/core/rake_task'
 require 'colorize'
 require 'json'
@@ -160,7 +161,13 @@ namespace :reports do
   task :build, :tasks do |t, args|
     args.with_defaults(:tasks => [ "unspecified" ])
     now = Time.now
-    fname = File.join("#{$REPORTS}", "%s--%s.json" % [ args[:tasks].join("-"), now.strftime("%Y-%m-%dT%H:%M:%S") ])
+    now = case RbConfig::CONFIG['host_os']
+          when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
+            now.strftime("%Y-%m-%dT%H-%M-%S")
+          else
+            now.strftime("%Y-%m-%dT%H:%M:%S")
+          end
+    fname = File.join("#{$REPORTS}", "%s--%s.json" % [ args[:tasks].join("-"), now ])
     File.open(fname, "w") { |f|
       # Test results
       tests = FileList.new(File.join("#{$REPORTS}", "current", "*.json")).sort.map { |j|
