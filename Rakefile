@@ -3,8 +3,8 @@ require 'rspec/core/rake_task'
 require 'colorize'
 require 'json'
 
-$HOSTS    = "./hosts"           # List of all hosts
-$REPORTS  = "./reports"         # Where to store JSON reports
+$HOSTS    = File.join(".", "hosts") # List of all hosts
+$REPORTS  = File.join(".", "reports") # Where to store JSON reports
 
 # Return all roles of a given host
 def roles(host)
@@ -50,7 +50,7 @@ class ServerspecTask < RSpec::Core::RakeTask
 
   # Run our serverspec task. Errors are ignored.
   def run_task(verbose)
-    json = "#{$REPORTS}/current/#{target}.json"
+    json = File.join("#{$REPORTS}", "current", "#{target}.json")
     @rspec_opts = ["--format", "json", "--out", json]
     system("env TARGET_HOST=#{target} TARGET_TAGS=#{(tags || []).join(",")} #{spec_command}")
     status(target, json) if verbose
@@ -100,7 +100,7 @@ namespace :check do
         dirs = host[:roles] + [ host[:name] ]
         t.target = host[:name]
         t.tags = host[:tags]
-        t.pattern = './spec/{' + dirs.join(",") + '}/*_spec.rb'
+        t.pattern = File.join('.', 'spec', '{' + dirs.join(",") + '}', '*_spec.rb')
       end
     end
   end
@@ -121,12 +121,12 @@ end
 namespace :reports do
   desc "Clean up old partial reports"
   task :clean do
-    FileUtils.rm_rf "#{$REPORTS}/current"
+    FileUtils.rm_rf File.join("#{$REPORTS}", "current")
   end
 
   desc "Clean reports without results"
   task :housekeep do
-    FileList.new("#{$REPORTS}/*.json").map { |f|
+    FileList.new(File.join("#{$REPORTS}", "*.json")).map { |f|
       content = File.read(f)
       if content.empty?
         # No content, let's remove it
@@ -150,7 +150,7 @@ namespace :reports do
 
   desc "Gzip all reports"
   task :gzip do
-    FileList.new("#{$REPORTS}/*.json").each { |f|
+    FileList.new(File.join("#{$REPORTS}","*.json")).each { |f|
       system "gzip", f
     }
   end
@@ -160,10 +160,10 @@ namespace :reports do
   task :build, :tasks do |t, args|
     args.with_defaults(:tasks => [ "unspecified" ])
     now = Time.now
-    fname = "#{$REPORTS}/%s--%s.json" % [ args[:tasks].join("-"), now.strftime("%Y-%m-%dT%H:%M:%S") ]
+    fname = File.join("#{$REPORTS}", "%s--%s.json" % [ args[:tasks].join("-"), now.strftime("%Y-%m-%dT%H:%M:%S") ])
     File.open(fname, "w") { |f|
       # Test results
-      tests = FileList.new("#{$REPORTS}/current/*.json").sort.map { |j|
+      tests = FileList.new(File.join("#{$REPORTS}", "current", "*.json")).sort.map { |j|
         content = File.read(j).strip
         {
           :hostname => File.basename(j, ".json"),
@@ -171,7 +171,7 @@ namespace :reports do
         }
       }.to_a
       # Relevant source files
-      sources = FileList.new("#{$REPORTS}/current/*.json").sort.map { |j|
+      sources = FileList.new(File.join("#{$REPORTS}", "current", "*.json")).sort.map { |j|
         content = File.read(j).strip
         results = JSON.parse(content.empty? ? '{"examples": []}' : content)["examples"]
         results.map { |r| r["file_path"] }
