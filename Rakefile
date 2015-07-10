@@ -160,14 +160,12 @@ namespace :reports do
   desc "Build final report"
   task :build, :tasks do |t, args|
     args.with_defaults(:tasks => [ "unspecified" ])
-    now = Time.now
-    now = case RbConfig::CONFIG['host_os']
-          when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
-            now.strftime("%Y-%m-%dT%H-%M-%S")
-          else
-            now.strftime("%Y-%m-%dT%H:%M:%S")
-          end
+    now = Time.now.strftime("%Y-%m-%dT%H-%M-%S")
     fname = File.join("#{$REPORTS}", "%s--%s.json" % [ args[:tasks].join("-"), now ])
+    if /mswin|msys|mingw|cygwin|bccwin|wince|emc/.match RbConfig::CONFIG['host_os']
+      # For Windows, we need to remove all those pesky ":" in filenames
+      fname.gsub! ':', '-'
+    end
     File.open(fname, "w") { |f|
       # Test results
       tests = FileList.new(File.join("#{$REPORTS}", "current", "*.json")).sort.map { |j|
