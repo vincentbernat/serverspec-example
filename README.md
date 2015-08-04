@@ -16,6 +16,9 @@ Currently, this has not been updated to
 There is a spec_helpver_v2.rb which will allow testing of v2 functions
 located in spec/
 
+A tool similar to `serverspec` but with Python is
+[Testinfra](https://testinfra.readthedocs.org/en/latest/).
+
 First steps
 -----------
 
