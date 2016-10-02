@@ -11,10 +11,16 @@ additions:
 
 [serverspec]: http://serverspec.org/
 
+[GoodData](http://www.gooddata.com/) also open sourced a
+[more complete setup](https://github.com/gooddata/serverspec-core) and
+moved the UI to a
+[server-side component](https://github.com/gooddata/serverspec-ui)
+which should be useful if you happen to have a lot of tests.
+
 Currently, this has not been updated to
-[Serverspec v2](http://serverspec.org/changes-of-v2.html).
-There is a spec_helpver_v2.rb which will allow testing of v2 functions
-located in spec/
+[Serverspec v2](http://serverspec.org/changes-of-v2.html).  There is a
+`spec_helpver_v2.rb` which will allow testing of v2 functions located
+in `spec/`
 
 A tool similar to `serverspec` but with Python is
 [Testinfra](https://testinfra.readthedocs.org/en/latest/).
