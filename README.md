@@ -25,6 +25,9 @@ in `spec/`
 A tool similar to `serverspec` but with Python is
 [Testinfra](https://testinfra.readthedocs.org/en/latest/).
 
+You may also find additional information about this code in
+[this blog post](https://vincent.bernat.ch/en/blog/2014-serverspec-test-infrastructure).
+
 First steps
 -----------
 
